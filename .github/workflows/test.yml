@@ -43,6 +43,7 @@ jobs:
           sudo make install
       - name: Install dependencies
         run: |
+          ri --list-doc-dirs
           gem install bundler --no-document
           rake -V
           gem install rake
