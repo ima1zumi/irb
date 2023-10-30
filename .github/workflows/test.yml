@@ -44,6 +44,7 @@ jobs:
       - name: Install dependencies
         run: |
           ri --list-doc-dirs
+          ls /opt/hostedtoolcache/Ruby/3.2.2/x64/share/ri/3.2.0/system
           gem install bundler --no-document
           rake -V
           gem install rake
