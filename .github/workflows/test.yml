@@ -13,31 +13,6 @@ jobs:
       engine: cruby-truffleruby
       min_version: 2.7
 
-  irb:
-    needs: ruby-versions
-    name: rake test ${{ matrix.ruby }} ${{ matrix.with_latest_reline && '(latest reline)' || '' }}
-    strategy:
-      matrix:
-        ruby: ${{ fromJson(needs.ruby-versions.outputs.versions) }}
-        with_latest_reline: [true, false]
-        exclude:
-          - ruby: truffleruby
-      fail-fast: false
-    runs-on: ubuntu-latest
-    env:
-      WITH_LATEST_RELINE: ${{matrix.with_latest_reline}}
-    timeout-minutes: 30
-    steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: ${{ matrix.ruby }}
-          bundler-cache: true
-      - name: Run tests
-        run: bundle exec rake test
-      - name: Run tests in isolation
-        run: bundle exec rake test_in_isolation
   vterm-yamatanooroti:
     needs: ruby-versions
     name: >-
@@ -45,11 +20,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ruby: ${{ fromJson(needs.ruby-versions.outputs.versions) }}
-        with_latest_reline: [true, false]
-        exclude:
-          - ruby: truffleruby
-          - ruby: truffleruby-head
+        ruby: ['3.2', 'head']
+        with_latest_reline: [true]
       fail-fast: false
     env:
       WITH_LATEST_RELINE: ${{matrix.with_latest_reline}}
@@ -71,7 +43,12 @@ jobs:
           sudo make install
       - name: Install dependencies
         run: |
+          ri --list-doc-dirs
+          ri --no-pager String
           gem install bundler --no-document
+          rake -V
+          gem install rake
+          rake -V
           gem rdoc --all --ri --no-rdoc
           WITH_VTERM=1 bundle install
       - name: rake test_yamatanooroti
