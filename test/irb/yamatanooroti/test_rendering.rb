@@ -248,14 +248,14 @@ class IRB::RenderingTest < Yamatanooroti::TestCase
       IRB.conf[:PROMPT_MODE] = :MY_PROMPT
       puts 'start IRB'
     LINES
-    start_terminal(4, 12, %W{ruby -I#{@pwd}/lib #{@pwd}/exe/irb}, startup_message: 'start IRB')
-    write("Str\C-i")
+    start_terminal(4, 14, %W{ruby -I#{@pwd}/lib #{@pwd}/exe/irb}, startup_message: 'start IRB')
+    write("Enc\C-i")
     close
     assert_screen(<<~EOC)
       start IRB
-      001> String
-      PressString
-      StrinStruct
+      001> Encoding
+      PressEncoding
+      StrinEncodingE
     EOC
   end
 
